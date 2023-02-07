@@ -1,4 +1,4 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useCallback } from "react"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import {
@@ -67,7 +67,7 @@ export const UserProvider = ({ children }) => {
   }
 
   //* Fetching all users
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     const usersRef = collection(db, "users")
 
     // const q = query(usersRef)
@@ -84,10 +84,10 @@ export const UserProvider = ({ children }) => {
     })
 
     setUsers(users)
-  }
+  }, [])
 
   //* Get LoggedIn user
-  const fetchLoggedInUser = async () => {
+  const fetchLoggedInUser = useCallback(async () => {
     try {
       const docref = collection(db, "users")
       const q = await query(docref, where("id", "==", auth.currentUser.uid))
@@ -105,10 +105,10 @@ export const UserProvider = ({ children }) => {
     } catch (e) {
       console.log(e)
     }
-  }
+  }, [auth.currentUser?.uid])
 
   //* Get a single user
-  const fetchSingleUser = async (id) => {
+  const fetchSingleUser = useCallback(async (id) => {
     try {
       const docref = doc(db, "users", id)
       const docSnap = await getDoc(docref)
@@ -118,7 +118,7 @@ export const UserProvider = ({ children }) => {
     } catch (e) {
       toast.error("Something went wrong")
     }
-  }
+  }, [])
 
   //*  LogginIn a user
   const onLogIn = async (email, password) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from "react"
+import React, { useContext, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Container, Button } from "@mui/material"
 import Sidebar from "../../components/Sidebar"
@@ -13,7 +13,7 @@ const ClassesPage = () => {
 
   useEffect(() => {
     fetchClasses()
-  }, [])
+  }, [fetchClasses])
 
   return (
     <div>

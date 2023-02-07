@@ -1,4 +1,4 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useCallback } from "react"
 import { toast } from "react-toastify"
 import { v4 } from "uuid"
 import {
@@ -34,7 +34,7 @@ export const SubjectsProvider = ({ children }) => {
   }
 
   //*   Fetch all Subjects
-  const fetchSubjects = async () => {
+  const fetchSubjects = useCallback(async () => {
     try {
       const subjectsref = await collection(db, dbname)
 
@@ -55,7 +55,7 @@ export const SubjectsProvider = ({ children }) => {
     } catch (error) {
       toast.error("Something went wrong")
     }
-  }
+  }, [])
 
   //*   Delete Subject
   const deleteSubject = async (id) => {

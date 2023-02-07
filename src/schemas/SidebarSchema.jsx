@@ -6,6 +6,7 @@ import {
   FaBook,
   FaBookReader,
   FaGraduationCap,
+  FaServer,
 } from "react-icons/fa"
 
 const SidebarSchema = [
@@ -38,6 +39,11 @@ const SidebarSchema = [
     title: "Classes",
     path: "/classes",
     icon: <FaBookReader size={"1.5rem"} />,
+  },
+  {
+    title: "Feedbacks",
+    path: "/feedbacks",
+    icon: <FaServer size={"1.5rem"} />,
   },
 ]
 

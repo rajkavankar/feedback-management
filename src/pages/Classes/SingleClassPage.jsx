@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { ClassContext } from "../../context/ClassContext"
+import { FeedbackContext } from "../../context/FeedbackContext"
 import FormPage from "../../components/FormPage"
+import { v4 } from "uuid"
 import {
   List,
   ListItem,
@@ -23,17 +25,31 @@ const SingleClassPage = () => {
   const [formRoute, setFormRoute] = useState("")
   const [copyText, setCopyText] = useState("copy")
   const { singleClass, fetchSingleClass } = useContext(ClassContext)
+  const { addFeedback } = useContext(FeedbackContext)
   const { id } = useParams()
   const url = window.location.href.split("/")
   url[3] = "form"
 
+  const URI = url.join("/")
+
   useEffect(() => {
-    setFormRoute(url.join("/"))
+    setFormRoute(URI)
     fetchSingleClass(id)
-  }, [])
+  }, [fetchSingleClass, id, URI])
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(formRoute)
+    const id = v4()
+    const formLink = `${formRoute}/${id}`
+    navigator.clipboard.writeText(formLink)
+    addFeedback(
+      singleClass.title,
+      singleClass.division,
+      singleClass.course,
+      singleClass.sem,
+      singleClass.year,
+      formLink,
+      id
+    )
     setCopyText("copied")
 
     setTimeout(() => {

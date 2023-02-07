@@ -11,7 +11,7 @@ const SingleUserPage = () => {
 
   useEffect(() => {
     fetchSingleUser(id)
-  }, [])
+  }, [fetchSingleUser, id])
 
   return (
     <div>

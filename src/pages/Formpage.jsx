@@ -13,13 +13,15 @@ import {
 import { useParams } from "react-router-dom"
 import DisplayCard from "../components/DisplayCard"
 import { ClassContext } from "../context/ClassContext"
+import { FeedbackContext } from "../context/FeedbackContext"
 
 const Formpage = () => {
   const { singleClass, fetchSingleClass } = useContext(ClassContext)
-  const { id } = useParams()
+  const { getFeedback } = useContext(FeedbackContext)
+  const { id, feedbackId } = useParams()
   useEffect(() => {
     fetchSingleClass(id)
-  }, [])
+  }, [fetchSingleClass, id])
 
   const initialValues = {
     punctuality: [],
@@ -30,10 +32,12 @@ const Formpage = () => {
     const { punctuality, tests } = values
     // console.log(punctuality)
     // console.log(tests)
-    let formData = {}
+
     const faculties = []
+    const subjects = []
     for (let val in singleClass.facultyData) {
       faculties.push(singleClass.facultyData[val].faculty)
+      subjects.push(singleClass.facultyData[val].subject)
     }
     // console.log(faculties)
 
@@ -42,12 +46,13 @@ const Formpage = () => {
     faculties.forEach((item, index) => {
       result.push({
         faculty: item,
+        subject: subjects[index],
         punctuality: punctuality[index],
         texts: tests[index],
       })
     })
 
-    console.log(result)
+    getFeedback(result, feedbackId)
   }
 
   return (
@@ -55,7 +60,7 @@ const Formpage = () => {
       <Container sx={{ my: 5 }}>
         <Box sx={{ px: 4, pt: 4, pb: 2, background: "#26a69a" }}>
           <h1>
-            {singleClass.title} ({singleClass.year}) division{" "}
+            {singleClass.title} ({singleClass.year}) division
             {singleClass.division} semester {singleClass.sem}
           </h1>
         </Box>

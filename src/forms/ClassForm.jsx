@@ -16,7 +16,7 @@ const ClassForm = () => {
 
   useEffect(() => {
     fetchCourses()
-  }, [])
+  }, [fetchCourses])
 
   let courseOptions = []
   courses.forEach((course) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from "react"
+import React, { useContext, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Container, Button } from "@mui/material"
 import Sidebar from "../../components/Sidebar"
@@ -10,7 +10,6 @@ import { SubjectsContext } from "../../context/SubjextsContext"
 
 const SubjectsPage = () => {
   const { subjects, fetchSubjects } = useContext(SubjectsContext)
-  const subs = []
 
   useEffect(() => {
     fetchSubjects()
@@ -19,8 +18,8 @@ const SubjectsPage = () => {
     // subjects.forEach((sub) => {
     //   subs.push(sub.data)
     // })
-  }, [])
-  console.log(subs)
+  }, [fetchSubjects])
+
   return (
     <div>
       <Sidebar>

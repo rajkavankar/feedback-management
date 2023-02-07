@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Formik, Form } from "formik"
 import { useNavigate, useParams } from "react-router-dom"
 import { Grid, Button } from "@mui/material"
@@ -34,8 +34,6 @@ const ClassForm = () => {
     subject: "",
   })
 
-  const { current: myArray } = useRef(singleClass.facultyData)
-
   const { faculty, subject } = formData
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -48,7 +46,7 @@ const ClassForm = () => {
     fetchCourses()
     fetchSingleClass(id)
     console.log(" invoke")
-  }, [fetchCourses, fetchSingleClass, id, myArray])
+  }, [fetchCourses, fetchSingleClass, id])
 
   let courseOptions = []
   courses.forEach((course) => {
@@ -81,6 +79,7 @@ const ClassForm = () => {
     }
     console.log(data)
     AddFacutyToClass(id, data)
+    setFormData({ faculty: "", subject: "" })
   }
 
   const onSubmit = (values, onSubmitProps) => {
