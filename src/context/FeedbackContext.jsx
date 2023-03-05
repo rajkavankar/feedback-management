@@ -29,7 +29,9 @@ export const FeedbackProvider = ({ children }) => {
     sem,
     year,
     feedbackLink,
-    id
+    id,
+    faculty,
+    subject
   ) => {
     try {
       const formData = {
@@ -39,6 +41,8 @@ export const FeedbackProvider = ({ children }) => {
         sem,
         year,
         id,
+        faculty,
+        subject,
         feedbackLink,
         feedbacks: [],
         timeStamp: serverTimestamp(),

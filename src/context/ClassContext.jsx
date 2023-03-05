@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback } from "react"
 import { toast } from "react-toastify"
 import { v4 } from "uuid"
+import { useNavigate } from "react-router-dom"
 import {
   doc,
   setDoc,
@@ -18,6 +19,7 @@ import { db } from "../firebase.config"
 export const ClassContext = createContext()
 
 export const ClassProvider = ({ children }) => {
+  const navigate = useNavigate()
   const dbname = "classes"
   const [classes, setClasses] = useState([])
   const [singleClass, setSingleClass] = useState({})
@@ -107,7 +109,10 @@ export const ClassProvider = ({ children }) => {
   //*   Delete class
   const deleteClass = async (id) => {
     try {
-      await deleteDoc(doc(db, dbname, id))
+      if (window.confirm("Are you sure")) {
+        await deleteDoc(doc(db, dbname, id))
+        navigate("/classes")
+      }
     } catch (error) {
       toast.error("Something went wrong")
       console.log(error)

@@ -24,7 +24,8 @@ import Flex from "../../components/Flex"
 const SingleClassPage = () => {
   const [formRoute, setFormRoute] = useState("")
   const [copyText, setCopyText] = useState("copy")
-  const { singleClass, fetchSingleClass } = useContext(ClassContext)
+  const { singleClass, fetchSingleClass, deleteClass } =
+    useContext(ClassContext)
   const { addFeedback } = useContext(FeedbackContext)
   const { id } = useParams()
   const url = window.location.href.split("/")
@@ -37,7 +38,7 @@ const SingleClassPage = () => {
     fetchSingleClass(id)
   }, [fetchSingleClass, id, URI])
 
-  const handleCopy = () => {
+  const handleCopy = (index) => {
     const id = v4()
     const formLink = `${formRoute}/${id}`
     navigator.clipboard.writeText(formLink)
@@ -48,13 +49,19 @@ const SingleClassPage = () => {
       singleClass.sem,
       singleClass.year,
       formLink,
-      id
+      id,
+      singleClass.facultyData[index].faculty,
+      singleClass.facultyData[index].subject
     )
     setCopyText("copied")
 
     setTimeout(() => {
       setCopyText("copy")
     }, 1000)
+  }
+
+  const handleDelete = () => {
+    deleteClass(id)
   }
   return (
     <div>
@@ -64,13 +71,18 @@ const SingleClassPage = () => {
             {singleClass.title} ({singleClass.year})
           </h1>
 
-          <Button
-            variant='contained'
-            sx={{ mr: 3 }}
-            component={Link}
-            to={`/update-class/${id}`}>
-            Update
-          </Button>
+          <div>
+            <Button
+              variant='contained'
+              sx={{ mr: 2 }}
+              component={Link}
+              to={`/update-class/${id}`}>
+              Update
+            </Button>
+            <Button variant='contained' color='error' onClick={handleDelete}>
+              Delete
+            </Button>
+          </div>
         </Flex>
         <Grid container>
           <Grid item lg={6}>
@@ -95,7 +107,7 @@ const SingleClassPage = () => {
             </List>
           </Grid>
         </Grid>
-        <Box sx={{ my: 2 }}>
+        {/* <Box sx={{ my: 2 }}>
           <Grid container spacing={1}>
             <Grid item lg={8}>
               <TextField
@@ -111,7 +123,7 @@ const SingleClassPage = () => {
               </Button>
             </Grid>
           </Grid>
-        </Box>
+        </Box> */}
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label='simple table'>
             <TableHead>
@@ -121,6 +133,9 @@ const SingleClassPage = () => {
                 </TableCell>
                 <TableCell style={{ color: "#fff" }} align='center'>
                   Subject
+                </TableCell>
+                <TableCell style={{ color: "#fff" }} align='center'>
+                  Get Feedback
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -134,6 +149,14 @@ const SingleClassPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell align='center'>{row.faculty}</TableCell>
                   <TableCell align='center'>{row.subject}</TableCell>
+                  <TableCell align='center'>
+                    <Button
+                      variant='contained'
+                      size='sm'
+                      onClick={() => handleCopy(index)}>
+                      copy link
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

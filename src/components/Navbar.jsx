@@ -32,7 +32,7 @@ const Navbar = ({ title }) => {
 }
 
 Navbar.defaultProps = {
-  title: "Test",
+  title: "Feedback-system",
 }
 
 export default Navbar

@@ -1,7 +1,6 @@
-import { useContext } from "react"
 import { Link } from "react-router-dom"
 import { Button } from "@mui/material"
-import { ClassContext } from "../context/ClassContext"
+
 export const ClassSchema = [
   {
     Header: "title",
@@ -23,8 +22,6 @@ export const ClassSchema = [
     Header: "Action",
     accessor: "action",
     Cell: ({ row }) => {
-      const { deleteClass } = useContext(ClassContext)
-
       return (
         <>
           <Button
@@ -33,17 +30,6 @@ export const ClassSchema = [
             component={Link}
             to={`/single-class/${row.original.id}`}>
             View
-          </Button>
-
-          <Button
-            variant='contained'
-            color='error'
-            onClick={() =>
-              window.confirm("Are you sure")
-                ? deleteClass(row.original.id)
-                : null
-            }>
-            Delete
           </Button>
         </>
       )

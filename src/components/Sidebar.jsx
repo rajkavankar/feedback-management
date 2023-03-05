@@ -27,7 +27,7 @@ const Sidebar = ({ children, title }) => {
 
   useEffect(() => {
     fetchLoggedInUser()
-  }, [fetchLoggedInUser])
+  }, [])
   return (
     <div>
       <Box
@@ -116,7 +116,7 @@ const Sidebar = ({ children, title }) => {
 }
 
 Sidebar.defaultProps = {
-  title: "test",
+  title: "Feedback-system",
 }
 
 export default Sidebar

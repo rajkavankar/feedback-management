@@ -17,42 +17,23 @@ import { FeedbackContext } from "../context/FeedbackContext"
 
 const Formpage = () => {
   const { singleClass, fetchSingleClass } = useContext(ClassContext)
-  const { getFeedback } = useContext(FeedbackContext)
-  const { id, feedbackId } = useParams()
+  const { getFeedback, fetchSingleFeedback, singleFeedback } =
+    useContext(FeedbackContext)
+  const { id, index, feedbackId } = useParams()
   useEffect(() => {
-    fetchSingleClass(id)
-  }, [fetchSingleClass, id])
+    // fetchSingleClass(id)
+    fetchSingleFeedback(feedbackId)
+  }, [id])
 
   const initialValues = {
-    punctuality: [],
-    tests: [],
+    punctuality: 0,
+    tests: 0,
   }
 
   const onSubmit = (values) => {
-    const { punctuality, tests } = values
-    // console.log(punctuality)
-    // console.log(tests)
+    console.log(values)
 
-    const faculties = []
-    const subjects = []
-    for (let val in singleClass.facultyData) {
-      faculties.push(singleClass.facultyData[val].faculty)
-      subjects.push(singleClass.facultyData[val].subject)
-    }
-    // console.log(faculties)
-
-    let result = []
-
-    faculties.forEach((item, index) => {
-      result.push({
-        faculty: item,
-        subject: subjects[index],
-        punctuality: punctuality[index],
-        texts: tests[index],
-      })
-    })
-
-    getFeedback(result, feedbackId)
+    getFeedback(values, feedbackId)
   }
 
   return (
@@ -60,64 +41,70 @@ const Formpage = () => {
       <Container sx={{ my: 5 }}>
         <Box sx={{ px: 4, pt: 4, pb: 2, background: "#26a69a" }}>
           <h1>
-            {singleClass.title} ({singleClass.year}) division
-            {singleClass.division} semester {singleClass.sem}
+            {singleFeedback.title} ({singleFeedback.year}) division &nbsp;
+            {singleFeedback.div} semester &nbsp; {singleFeedback.sem}
           </h1>
         </Box>
         <DisplayCard>
           <Formik initialValues={initialValues} onSubmit={onSubmit}>
             {({ submitForm }) => (
               <Form>
-                {singleClass.facultyData?.map((data, index) => (
-                  <div key={index}>
-                    <h2>
-                      {data.faculty} ~ {data.subject}
-                    </h2>
-                    <FormControl>
-                      <FormLabel>punctuality</FormLabel>
-                      <Field
-                        component={RadioGroup}
-                        name={`punctuality[${index}]`}>
-                        <FormControlLabel
-                          value='excellent'
-                          control={<Radio />}
-                          label='Excellent'
-                        />
-                        <FormControlLabel
-                          value='good'
-                          control={<Radio />}
-                          label='Good'
-                        />
-                        <FormControlLabel
-                          value='average'
-                          control={<Radio />}
-                          label='Average'
-                        />
-                      </Field>
-                    </FormControl>
-                    <br />
-                    <FormControl>
-                      <FormLabel>Tests</FormLabel>
-                      <Field component={RadioGroup} name={`tests[${index}]`}>
-                        <FormControlLabel
-                          value='excellent'
-                          control={<Radio />}
-                          label='Excellent'
-                        />
-                        <FormControlLabel
-                          value='good'
-                          control={<Radio />}
-                          label='Good'
-                        />
-                        <FormControlLabel
-                          value='average'
-                          control={<Radio />}
-                          label='Average'
-                        />
-                      </Field>
-                    </FormControl>
-                  </div>
-                ))}
+                <div>
+                  <h2>
+                    {singleFeedback.faculty} ~ {singleFeedback.subject}
+                  </h2>
+                  <FormControl>
+                    <FormLabel>punctuality</FormLabel>
+                    <Field component={RadioGroup} name='punctuality'>
+                      <FormControlLabel
+                        value={4}
+                        control={<Radio />}
+                        label='Excellent'
+                      />
+                      <FormControlLabel
+                        value={3}
+                        control={<Radio />}
+                        label='Good'
+                      />
+                      <FormControlLabel
+                        value={2}
+                        control={<Radio />}
+                        label='Average'
+                      />
+                      <FormControlLabel
+                        value={1}
+                        control={<Radio />}
+                        label='Unsatisfied'
+                      />
+                    </Field>
+                  </FormControl>
+                  <br />
+                  <FormControl>
+                    <FormLabel>Tests</FormLabel>
+                    <Field component={RadioGroup} name='tests'>
+                      <FormControlLabel
+                        value={4}
+                        control={<Radio />}
+                        label='Excellent'
+                      />
+                      <FormControlLabel
+                        value={3}
+                        control={<Radio />}
+                        label='Good'
+                      />
+                      <FormControlLabel
+                        value={2}
+                        control={<Radio />}
+                        label='Average'
+                      />
+                      <FormControlLabel
+                        value={1}
+                        control={<Radio />}
+                        label='Unsatisfied'
+                      />
+                    </Field>
+                  </FormControl>
+                </div>
 
                 <Button
                   variant='contained'

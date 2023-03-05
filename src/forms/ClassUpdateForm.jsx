@@ -13,12 +13,16 @@ import {
   TableRow,
   TableBody,
   TextField,
+  Autocomplete,
 } from "@mui/material"
 import SubmitButton from "../components/formik-components/SubmitButton"
 import { ClassContext } from "../context/ClassContext"
 import { CourseContext } from "../context/CourceContext"
+import { UserContext } from "../context/UserContext"
+import { SubjectsContext } from "../context/SubjextsContext"
 
 const ClassForm = () => {
+  const [count, setCount] = useState(0)
   const navigate = useNavigate()
   const { id } = useParams()
   const {
@@ -28,7 +32,10 @@ const ClassForm = () => {
     AddFacutyToClass,
     RemoveFacutyToClass,
   } = useContext(ClassContext)
+
+  const { fetchSubjects, subjects } = useContext(SubjectsContext)
   const { courses, fetchCourses } = useContext(CourseContext)
+  const { users, fetchUsers } = useContext(UserContext)
   const [formData, setFormData] = useState({
     faculty: "",
     subject: "",
@@ -45,12 +52,23 @@ const ClassForm = () => {
   useEffect(() => {
     fetchCourses()
     fetchSingleClass(id)
+    fetchSubjects()
+    fetchUsers()
     console.log(" invoke")
-  }, [fetchCourses, fetchSingleClass, id])
+    console.log(users)
+  }, [fetchCourses, fetchSingleClass, id, count])
 
   let courseOptions = []
   courses.forEach((course) => {
     courseOptions.push(course.data.title)
+  })
+  let subs = []
+  subjects.forEach((sub) => {
+    subs.push(sub.data.title)
+  })
+  let userNames = []
+  users.forEach((uname) => {
+    userNames.push(uname.data.name)
   })
 
   const initialValues = {
@@ -80,6 +98,7 @@ const ClassForm = () => {
     console.log(data)
     AddFacutyToClass(id, data)
     setFormData({ faculty: "", subject: "" })
+    setCount(count + 1)
   }
 
   const onSubmit = (values, onSubmitProps) => {
@@ -125,25 +144,39 @@ const ClassForm = () => {
           <h2>Facuties</h2>
           <Grid container sx={{ my: 2 }} spacing={2}>
             <Grid item lg={5}>
-              <TextField
-                type='text'
-                name='faculty'
-                fullWidth
-                variant='standard'
-                onChange={onChange}
+              <Autocomplete
+                options={userNames}
                 value={faculty}
-                label='Add faculty'
+                onChange={onChange}
+                name='faculty'
+                clearOnEscape
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    type='text'
+                    variant='standard'
+                    fullWidth
+                    label='Add faculty'
+                  />
+                )}
               />
             </Grid>
             <Grid item lg={5}>
-              <TextField
-                type='text'
-                name='subject'
-                variant='standard'
-                onChange={onChange}
+              <Autocomplete
+                options={subs}
                 value={subject}
-                fullWidth
-                label='Add subject'
+                onChange={onChange}
+                name='subject'
+                clearOnEscape
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    type='text'
+                    variant='standard'
+                    fullWidth
+                    label='Add subject'
+                  />
+                )}
               />
             </Grid>
             <Grid item lg={2}>
@@ -178,7 +211,13 @@ const ClassForm = () => {
                     <TableCell align='center'>{row.faculty}</TableCell>
                     <TableCell align='center'>{row.subject}</TableCell>
                     <TableCell align='center'>
-                      <Button onClick={() => RemoveFacutyToClass(id, row)}>
+                      <Button
+                        onClick={() => {
+                          if (window.confirm("Are you sure")) {
+                            RemoveFacutyToClass(id, row)
+                            setCount(count + 1)
+                          }
+                        }}>
                         Delete
                       </Button>
                     </TableCell>

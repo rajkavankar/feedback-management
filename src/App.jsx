@@ -26,6 +26,7 @@ import { FeedbackProvider } from "./context/FeedbackContext"
 import ExitPage from "./pages/ExitPage"
 import FeedbacksPage from "./pages/feedbacks/FeedbacksPage"
 import SingleFeedbackPage from "./pages/feedbacks/SingleFeedbackPage"
+import AddUserPage from "./pages/Users/AddUserPage"
 
 const App = () => {
   return (
@@ -52,6 +53,7 @@ const App = () => {
                     <Route path='/dashboard' element={<DashboardPage />} />
                   </Route>
                   <Route path='/users' element={<UsersPage />} />
+                  <Route path='/add-user' element={<AddUserPage />} />
                   <Route path='/profile' element={<ProfilePage />} />
                   <Route path='/user/:id' element={<SingleUserPage />} />
                   <Route path='/subjects' element={<SubjectsPage />} />
